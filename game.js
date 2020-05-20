@@ -13,6 +13,22 @@ let game = {
     }, 
     init: function() {
         this.ctx = document.getElementById('mycanvas').getContext('2d');
+        this.setEvents();
+    },
+    setEvents() {
+        window.addEventListener('keydown', e => {
+            if (e.keyCode === 37) {
+                this.platform.dx = -this.platform.velocity;
+                
+            } else if (e.keyCode === 39) {
+                this.platform.dx = this.platform.velocity;
+                
+        }
+        });
+        window.addEventListener('keyup', e => {
+            this.platform.dx = 0
+
+        })
     },
     preload(callback) {
         let loaded = 0;
@@ -40,9 +56,14 @@ let game = {
             }
         }
     },
+    update(){
+        this.platform.move()    
+    },
     run() {
         window.requestAnimationFrame(() => {
+            this.update();
             this.render();
+            this.run();
             
         });
     },
@@ -78,7 +99,14 @@ game.ball = {
 
 game.platform = {
     x: 280,
-    y: 300
+    y: 300,
+    velocity: 6,
+    dx: 0,  //смещение по оси в данный момент времени
+    move() {
+        if (this.dx) {
+            this.x += this.dx
+        } 
+    }
 }
 
 window.addEventListener('load', () => {
