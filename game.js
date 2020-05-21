@@ -1,6 +1,7 @@
 const KEYS = {
     LEFT: 37,
-    RIGHT: 39
+    RIGHT: 39,
+    SPACE: 32
 }
 
 
@@ -23,10 +24,14 @@ let game = {
     },
     setEvents() {
         window.addEventListener('keydown', e => {
-            if (e.keyCode === KEYS.LEFT || e.keyCode === KEYS.RIGHT) {
+            if(e.keyCode === KEYS.SPACE) {
+                this.platform.fire();
+                
+            } else if (e.keyCode === KEYS.LEFT || e.keyCode === KEYS.RIGHT) {
                 this.platform.start(e.keyCode);
                 
             }
+            
         });
         window.addEventListener('keyup', e => {
             this.platform.stop()
@@ -60,7 +65,8 @@ let game = {
         }
     },
     update(){
-        this.platform.move()    
+        this.platform.move();
+        this.ball.move();   
     },
     run() {
         window.requestAnimationFrame(() => {
@@ -98,14 +104,30 @@ game.ball = {
     y: 280,
     width: 20,
     height: 20,
+    dy: 0,
+    velocity: 3,
+    start() {
+        this.dy = -this.velocity
+    },
+    move() {
+        if (this.dy) {
+            this.y += this.dy
+        }
+    }
     
 }
 
 game.platform = {
     x: 280,
     y: 300,
-    velocity: 6,
+    velocity: 6, //показатель допустимой скорости
     dx: 0,  //смещение по оси в данный момент времени
+    ball: game.ball,
+    fire() {
+        if (this.ball)
+        this.ball.start();
+        this.ball = null;
+    },
     start (direction) {
         if(direction === KEYS.LEFT) {
             this.dx = -this.velocity
@@ -120,8 +142,11 @@ game.platform = {
     move() {
         if (this.dx) {
             this.x += this.dx;
-            game.ball.x += this.dx;
+            if(this.ball) {
+            this.ball.x += this.dx;
+            }
         } 
+
     }
 }
 
