@@ -60,6 +60,8 @@ let game = {
         for(let row = 0; row < this.rows; row++) {
             for (let col = 0; col < this.cols; col++) {
                 this.blocks.push({
+                    width: 60,
+                    height: 20,
                     x: 64 * col + 64,
                     y: 24 * row + 35
                 })
@@ -68,7 +70,14 @@ let game = {
     },
     update(){
         this.platform.move();
-        this.ball.move();   
+        this.ball.move(); 
+        
+        for(let block of this.blocks) {
+            if(this.ball.collide(block)) {
+                this.ball.bumpBlock(block);
+            }
+            
+        }
     },
     run() {
         window.requestAnimationFrame(() => { //указание для каждого сдледующего кадра анимации
@@ -125,6 +134,22 @@ game.ball = {
         if(this.dx) {
             this.x += this.dx
         }
+    },
+    collide(element){
+        let x = this.x + this.dx;
+        let y = this.y + this.dy;
+        if(
+        x + this.width > element.x && 
+        x < element.x + element.width &&
+        y + this.height > element.y &&
+        y < element.y + element.height) {
+            return true;
+        } 
+        return false;
+    },
+    bumpBlock(block) {
+        this.dy = -this.dy;
+
     }
     
 }
