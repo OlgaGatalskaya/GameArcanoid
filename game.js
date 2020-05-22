@@ -71,14 +71,22 @@ let game = {
     update(){
         this.platform.move();
         this.ball.move(); 
-        
+        this.collideBlocks();
+        this.collidePlatform();
+    },
+    collideBlocks() {
         for(let block of this.blocks) {
             if(this.ball.collide(block)) {
                 this.ball.bumpBlock(block);
-            }
-            
+            }    
         }
     },
+    collidePlatform() {
+        if (this.ball.collide(this.platform)) {
+            this.ball.bumpPlatform(this.platform);
+        }
+    },
+
     run() {
         window.requestAnimationFrame(() => { //указание для каждого сдледующего кадра анимации
             this.update(); //обновление игрового состояния
@@ -148,8 +156,13 @@ game.ball = {
         return false;
     },
     bumpBlock(block) {
-        this.dy = -this.dy;
+        this.dy = -this.dy; //летит с тем же углом при отскоке
 
+    },
+    bumpPlatform(platform) {
+        this.dy = -this.dy;
+        let touchX = this.x + this.width / 2; // координаты центра мяча
+        this.dx = this.velocity * platform.getTouchOffset(touchX);
     }
     
 }
@@ -157,6 +170,8 @@ game.ball = {
 game.platform = {
     x: 280,
     y: 300,
+    width: 100,
+    height: 14,
     velocity: 6, //показатель допустимой скорости
     dx: 0,  //смещение по оси в данный момент времени
     ball: game.ball,
@@ -183,6 +198,13 @@ game.platform = {
             this.ball.x += this.dx;
             }
         } 
+
+    },
+    getTouchOffset(x) {
+       let diff = (this.x + this.width) - x //правая сторона платформы - координата косания мяча
+       let offset = this.width - diff; // левая сторона платформы
+       let result = offset * 2 / this.width;
+       return result - 1; //результат от центра
 
     }
 }
