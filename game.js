@@ -75,6 +75,7 @@ let game = {
         this.collideBlocks();
         this.collidePlatform();
         this.ball.collideWorldBounds();
+        this.platform.platformInside()
     },
     collideBlocks() {
         for(let block of this.blocks) {
@@ -193,6 +194,9 @@ game.ball = {
 
     },
     bumpPlatform(platform) {
+        if (platform.dx) {
+        this.x += platform.dx
+        }
         if(this.dy > 0) {
             this.dy = -this.velocity; //чтобы мяч отталкивался только вверх
             let touchX = this.x + this.width / 2; // координаты центра мяча
@@ -241,6 +245,25 @@ game.platform = {
        let offset = this.width - diff; // левая сторона платформы
        let result = offset * 2 / this.width;
        return result - 1; //результат от центра
+
+    },
+    platformInside() {
+        let x = this.x + this.dx;
+        
+        let platformLeft = x;
+        let platformRight = platformLeft + this.width;
+
+        let worldLeft = 0;
+        let worldRight = game.width;
+
+        if (platformLeft < worldLeft) {
+            this.x = 0;
+            
+        } else if (platformRight > worldRight) {
+            this.x = worldRight - this.width;
+           
+        }
+
 
     }
 }
