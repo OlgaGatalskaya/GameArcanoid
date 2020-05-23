@@ -63,7 +63,8 @@ let game = {
                     width: 60,
                     height: 20,
                     x: 64 * col + 64,
-                    y: 24 * row + 35
+                    y: 24 * row + 35,
+                    active: true
                 })
             }
         }
@@ -76,9 +77,9 @@ let game = {
     },
     collideBlocks() {
         for(let block of this.blocks) {
-            if(this.ball.collide(block)) {
-                this.ball.bumpBlock(block);
-            }    
+            if (block.active && this.ball.collide(block)) {
+                    this.ball.bumpBlock(block);
+                }    
         }
     },
     collidePlatform() {
@@ -105,6 +106,7 @@ let game = {
     },
     renderBlocks() {
         for (let block of this.blocks) {
+            if (block.active)
             this.ctx.drawImage(this.sprites.block, block.x, block.y)
         }
     },
@@ -157,6 +159,7 @@ game.ball = {
     },
     bumpBlock(block) {
         this.dy = -this.dy; //летит с тем же углом при отскоке
+        block.active = false;
 
     },
     bumpPlatform(platform) {
