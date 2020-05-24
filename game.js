@@ -15,6 +15,7 @@ let game = {
     width: 640,
     height: 360,
     running: true,
+    score: 0,
     sprites: {
         background: null,
         ball: null,
@@ -78,10 +79,18 @@ let game = {
         this.ball.collideWorldBounds();
         this.platform.platformInside()
     },
+    addScore() {
+        ++this.score;
+
+        if(this.score >= this.blocks.length) {
+            this.end('You win!');
+        }
+    },
     collideBlocks() {
         for(let block of this.blocks) {
             if (block.active && this.ball.collide(block)) {
                     this.ball.bumpBlock(block);
+                    this.addScore();
                 }    
         }
     },
@@ -122,6 +131,14 @@ let game = {
         });
         
 
+    },
+    end(message) {
+        //1.остановить игру
+        this.running = false;
+        //2.вывести сообщение
+        alert (message);
+        //3.перезапустить игру перезагрузив страницу
+        window.location.reload();
     },
     random(min, max) {
         return Math.floor(Math.random() * (max - min + 1) + min);
@@ -187,17 +204,14 @@ game.ball = {
             this.dy = this.velocity;
             this.y = 0;
         } else if (ballBottom > worldBottom) {
-            //1.остановить игру
-            game.running = false;
-            //2.вывести сообщение
-            alert ('Game Over');
-            //3.перезапустить игру перезагрузив страницу
-            window.location.reload();
+            game.end('Game Over');
+            
         }
     },
     bumpBlock(block) {
         this.dy = -this.dy; //летит с тем же углом при отскоке
         block.active = false;
+
 
     },
     bumpPlatform(platform) {
