@@ -14,6 +14,7 @@ let game = {
     cols: 8,
     width: 640,
     height: 360,
+    running: true,
     sprites: {
         background: null,
         ball: null,
@@ -91,6 +92,7 @@ let game = {
     },
 
     run() {
+        if (this.running)
         window.requestAnimationFrame(() => { //указание для каждого сдледующего кадра анимации
             this.update(); //обновление игрового состояния
             this.render(); //отрисовка игровых объектов
@@ -185,7 +187,12 @@ game.ball = {
             this.dy = this.velocity;
             this.y = 0;
         } else if (ballBottom > worldBottom) {
-           console.log('game over')
+            //1.остановить игру
+            game.running = false;
+            //2.вывести сообщение
+            alert ('Game Over');
+            //3.перезапустить игру перезагрузив страницу
+            window.location.reload();
         }
     },
     bumpBlock(block) {
