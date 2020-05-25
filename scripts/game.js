@@ -118,7 +118,7 @@ let game = {
         ++this.score;
 
         if(this.score >= this.blocks.length) {
-            this.end('You win!');
+            this.end('You win!!!');
         }
     },
     collideBlocks() {
@@ -176,7 +176,7 @@ let game = {
         //1.остановить игру
         this.running = false;
         //2.вывести сообщение
-        //alert (message);
+        alert (message);
         //3.перезапустить игру перезагрузив страницу
         window.location.reload();
     },

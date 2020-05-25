@@ -72,6 +72,7 @@ game.ball = {
         } else if (ballBottom > worldBottom) {
             game.end('Game Over');
             
+            
         }
     },
     bumpBlock(block) {
