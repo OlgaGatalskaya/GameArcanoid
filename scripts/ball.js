@@ -1,22 +1,23 @@
 game.ball = {
-    x: 320,
-    y: 280,
-    width: 20,
-    height: 20,
+    x: game.width / 2 - 20,
+    y: game.height - 85,
+    width: 40,
+    height: 40,
     dy: 0,
     dx: 0,
-    velocity: 3,
+    velocity: 10,
     frame: 0,
     start() {
         this.dy = -this.velocity;
         this.dx = game.random(-this.velocity, +this.velocity);
 
-        setInterval(() => {
+       /* setInterval(() => {
             ++this.frame;
             if(this.frame > 3) {
                 this.frame = 0;
             }
-        }, 100);
+        }, 100);*/
+
     },
     move() {
         if (this.dy) {
@@ -30,6 +31,7 @@ game.ball = {
     collide(element){
         let x = this.x + this.dx;
         let y = this.y + this.dy;
+
         if(
         x + this.width > element.x && 
         x < element.x + element.width &&

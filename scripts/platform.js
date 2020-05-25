@@ -1,9 +1,9 @@
 game.platform = {
-    x: 280,
-    y: 300,
-    width: 100,
-    height: 14,
-    velocity: 6, //показатель допустимой скорости
+    x: game.width / 2 - 125,
+    y: game.height - 45,
+    width: 251,
+    height: 41,
+    velocity: 15, //показатель допустимой скорости
     dx: 0,  //смещение по оси в данный момент времени
     ball: game.ball,
     fire() {
